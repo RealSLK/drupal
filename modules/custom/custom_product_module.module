@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function custom_product_module_install() {
+  // Your installation logic goes here.
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function custom_product_module_uninstall() {
+  // Your uninstallation logic goes here.
+}
+
+
+use GuzzleHttp\Client;
+
+function custom_product_create($data) {
+    $client = \Drupal::httpClient();
+    $response = $client->post('http://example.com/jsonapi/node/product', [
+        'json' => $data,
+        'headers' => [
+            'Content-Type' => 'application/vnd.api+json',
+            // Include any additional headers as needed.
+        ],
+    ]);
+    return $response->getStatusCode(); // Return status code (e.g., 201 for created).
+}
+
+function custom_product_read($id) {
+    $client = \Drupal::httpClient();
+    $response = $client->get("http://example.com/jsonapi/node/product/$id");
+    return json_decode($response->getBody()->getContents(), TRUE);
+}
+
+function custom_product_update($id, $data) {
+    $client = \Drupal::httpClient();
+    $response = $client->patch("http://example.com/jsonapi/node/product/$id", [
+        'json' => $data,
+        'headers' => [
+            'Content-Type' => 'application/vnd.api+json',
+            // Include any additional headers as needed.
+        ],
+    ]);
+    return $response->getStatusCode(); // Return status code (e.g., 200 for success).
+}
+
+function custom_product_delete($id) {
+    $client = \Drupal::httpClient();
+    $response = $client->delete("http://example.com/jsonapi/node/product/$id");
+    return $response->getStatusCode(); // Return status code (e.g., 204 for success, 404 if not found).
+}
